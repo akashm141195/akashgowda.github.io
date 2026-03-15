@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name — Platform Engineer & AI Systems Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #f5f3ef;
+      --surface:   #edeae4;
+      --border:    #d8d4cc;
+      --muted:     #a09a91;
+      --body:      #3a3632;
+      --heading:   #1a1714;
+      --accent:    #4a6741;       /* forest green */
+      --accent2:   #8b7355;       /* warm earth */
+      --tag-bg:    #e4e0d8;
+
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans:  'DM Sans', sans-serif;
+      --font-mono:  'DM Mono', monospace;
+
+      --max: 780px;
+      --max-wide: 1080px;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.75;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── NOISE TEXTURE OVERLAY ──────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.6;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(245,243,239,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--border); }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--heading); }
+
+    /* ─── LAYOUT HELPERS ─────────────────────────────────────── */
+    section {
+      padding: 6rem 2rem;
+    }
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .container-wide {
+      max-width: var(--max-wide);
+      margin: 0 auto;
+    }
+
+    /* ─── SECTION LABELS ─────────────────────────────────────── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 40px;
+      background: var(--border);
+    }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 2rem 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 20%, rgba(74,103,65,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(139,115,85,0.06) 0%, transparent 55%);
+    }
+    /* Subtle grid lines */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+    }
+    .hero-content {
+      position: relative;
+      max-width: var(--max-wide);
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2.6rem, 5.5vw, 5rem);
+      line-height: 1.12;
+      color: var(--heading);
+      font-weight: 400;
+      max-width: 740px;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.9s ease 0.35s forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.8s ease 0.65s forwards;
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      letter-spacing: 0.06em;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.4);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .scroll-line {
+      width: 36px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────────── */
+    #about { background: var(--bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-left {
+      position: sticky;
+      top: 7rem;
+    }
+    .about-avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(145deg, var(--surface), var(--tag-bg));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      color: var(--border);
+      letter-spacing: 0.02em;
+    }
+    .about-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .about-meta-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-meta-item:last-child { border-bottom: none; }
+    .about-meta-key {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .about-meta-val {
+      color: var(--body);
+      font-size: 0.82rem;
+    }
+    .about-right p {
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--body);
+    }
+    .about-right p:first-of-type {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      line-height: 1.55;
+      color: var(--heading);
+      font-weight: 400;
+    }
+    .about-right p:first-of-type em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .about-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    .value-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      padding: 0.3rem 0.75rem;
+      background: var(--tag-bg);
+      border-radius: 3px;
+      color: var(--muted);
+    }
+
+    /* ─── BUILDING ───────────────────────────────────────────── */
+    #building { background: var(--surface); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .project-card {
+      background: var(--bg);
+      padding: 2.2rem 2rem;
+      transition: background 0.2s;
+      cursor: default;
+    }
+    .project-card:hover { background: #f0ece5; }
+    .project-card:nth-child(1) { border-radius: 5px 0 0 0; }
+    .project-card:nth-child(2) { border-radius: 0 5px 0 0; }
+    .project-card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .project-card-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--heading);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .project-card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .project-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+    .ptag {
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      background: var(--tag-bg);
+      border-radius: 2px;
+      color: var(--accent2);
+    }
+
+    /* ─── THOUGHTS ───────────────────────────────────────────── */
+    #thoughts { background: var(--bg); }
+    .posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .post-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      align-items: baseline;
+      gap: 2rem;
+      padding: 1.6rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .post-item:first-child { border-top: 1px solid var(--border); }
+    .post-item:hover .post-title { color: var(--accent); }
+    .post-date {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .post-title {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--heading);
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .post-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .thoughts-cta {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+    .thoughts-cta:hover { opacity: 0.7; }
+
+    /* ─── WORKSHOPS ──────────────────────────────────────────── */
+    #workshops { background: var(--heading); color: #c8c4bc; }
+    #workshops .section-label { color: rgba(200,196,188,0.4); }
+    #workshops .section-label::after { background: rgba(200,196,188,0.15); }
+    .workshop-header {
+      margin-bottom: 4rem;
+    }
+    .workshop-headline {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--bg);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .workshop-headline em { color: #8dab7f; font-style: italic; }
+    .workshop-sub {
+      color: rgba(200,196,188,0.65);
+      max-width: 500px;
+      font-size: 1rem;
+    }
+    .workshops-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+    .workshop-card {
+      background: rgba(255,255,255,0.03);
+      padding: 2rem 1.8rem;
+      transition: background 0.2s;
+    }
+    .workshop-card:hover { background: rgba(255,255,255,0.06); }
+    .ws-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(200,196,188,0.3);
+      margin-bottom: 1.2rem;
+    }
+    .ws-title {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--bg);
+      font-weight: 400;
+      margin-bottom: 0.7rem;
+      line-height: 1.3;
+    }
+    .ws-desc {
+      font-size: 0.87rem;
+      color: rgba(200,196,188,0.55);
+      line-height: 1.65;
+    }
+    .workshop-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.85rem 1.8rem;
+      border: 1px solid rgba(200,196,188,0.2);
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: var(--bg);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .workshop-cta:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(200,196,188,0.4);
+    }
+
+    /* ─── EXPERIMENTS ────────────────────────────────────────── */
+    #experiments { background: var(--surface); }
+    .experiments-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .exp-card {
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1.5rem;
+      background: var(--bg);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .exp-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .exp-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .status-dot.active { background: var(--accent); }
+    .status-dot.paused { background: var(--accent2); }
+    .exp-title {
+      font-size: 0.95rem;
+      color: var(--heading);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      font-family: var(--font-sans);
+    }
+    .exp-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── NATURE & LIFE ──────────────────────────────────────── */
+    #nature {
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .nature-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 90% 50%, rgba(74,103,65,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .nature-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+    }
+    .nature-text p {
+      font-size: 1.03rem;
+      color: var(--body);
+      margin-bottom: 1.3rem;
+    }
+    .nature-text p:first-of-type {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      line-height: 1.55;
+      color: var(--heading);
+      font-weight: 400;
+    }
+    .nature-text p:first-of-type em {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .nature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2.5rem;
+    }
+    .nature-card-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+    .nature-card-headline {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: var(--heading);
+      font-weight: 400;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .nature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .nature-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .nature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.88rem;
+      color: var(--body);
+    }
+    .nature-item-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ─── CONTACT ────────────────────────────────────────────── */
+    #contact { background: var(--surface); }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .contact-left h2 {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      color: var(--heading);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .contact-left h2 em {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .contact-left p {
+      color: var(--muted);
+      font-size: 0.97rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+    .contact-link:first-child { border-top: 1px solid var(--border); }
+    .contact-link:hover { color: var(--accent); }
+    .contact-link-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .contact-link-val {
+      font-size: 0.9rem;
+      color: var(--body);
+      transition: color 0.2s;
+    }
+    .contact-link:hover .contact-link-val { color: var(--accent); }
+    .contact-link-arrow { color: var(--muted); font-size: 0.8rem; }
+    .contact-right {
+      padding-top: 1rem;
+    }
+    .contact-currently {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2rem;
+    }
+    .currently-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .currently-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      align-items: flex-start;
+    }
+    .currently-item:last-child { margin-bottom: 0; }
+    .currently-icon { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+    .currently-text {
+      font-size: 0.88rem;
+      color: var(--body);
+      line-height: 1.55;
+    }
+    .currently-text strong {
+      font-weight: 500;
+      color: var(--heading);
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--heading);
+      padding: 2.5rem 2rem;
+    }
+    .footer-inner {
+      max-width: var(--max-wide);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: rgba(200,196,188,0.35);
+    }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: rgba(200,196,188,0.35);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(200,196,188,0.7); }
+
+    /* ─── DIVIDER ────────────────────────────────────────────── */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── SCROLL ANIMATIONS ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-left { position: static; }
+      .about-avatar { max-width: 160px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .workshops-grid { grid-template-columns: 1fr; }
+      .experiments-grid { grid-template-columns: 1fr; }
+      .nature-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .post-item { grid-template-columns: 1fr; gap: 0.3rem; }
+      .post-date, .post-tag { display: none; }
+      .hero-headline { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-logo">akash.dev</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#building">Building</a></li>
+      <li><a href="#thoughts">Thoughts</a></li>
+      <li><a href="#workshops">Workshops</a></li>
+      <li><a href="#nature">Life</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Platform Engineer · AI Systems · India</div>
+      <h1 class="hero-headline">Building <em>Intelligent Systems</em><br>for the Future of Infrastructure</h1>
+      <p class="hero-sub">
+        I design platforms where cloud infrastructure meets artificial intelligence — autonomous agents, knowledge systems, and developer tools that think.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">AWS</span>
+        <span class="chip">Kubernetes</span>
+        <span class="chip">Terraform</span>
+        <span class="chip">AI Agents</span>
+        <span class="chip">Multi-Agent Systems</span>
+        <span class="chip">RAG</span>
+        <span class="chip">DevOps</span>
+      </div>
+      <div class="hero-scroll">
+        <span class="scroll-line"></span>
+        scroll to explore
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container-wide">
+      <p class="section-label">Who I Am</p>
+      <div class="about-grid">
+        <div class="about-left reveal">
+          <div class="about-avatar">
+            <div class="avatar-placeholder">YN</div>
+          </div>
+          <div class="about-meta">
+            <div class="about-meta-item">
+              <span class="about-meta-key">Role</span>
+              <span class="about-meta-val">Senior Platform Engineer</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="about-meta-key">Based</span>
+              <span class="about-meta-val">India</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="about-meta-key">Focus</span>
+              <span class="about-meta-val">AI + Infrastructure</span>
+            </div>
+            <div class="about-meta-item">
+              <span class="about-meta-key">Open to</span>
+              <span class="about-meta-val">Collaboration</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-right reveal">
+          <p>I'm an engineer who sees infrastructure as a <em>living system</em> — one that can learn, adapt, and act. My work sits at the intersection of cloud platforms and AI, where I build things that blur the line between automation and intelligence.</p>
+          <p>With deep roots in AWS, Kubernetes, and Terraform, I've spent years designing platforms that operate at scale. But what truly drives me now is the question: <em>what happens when that infrastructure becomes intelligent?</em> AI agents that troubleshoot systems. RAG knowledge bases that remember. Cloud automation that reasons.</p>
+          <p>Beyond the terminal, I think in systems. I believe the best infrastructure is invisible — quietly working, quietly learning. The same principle applies to life: remove the noise, keep what matters, let the important things breathe.</p>
+          <p>I'm building toward something larger — a body of work at the edge of AI and infrastructure, paired with a small corner of the world where technology and nature coexist quietly.</p>
+          <div class="about-values">
+            <span class="value-tag">Curious</span>
+            <span class="value-tag">Builder Mindset</span>
+            <span class="value-tag">Systems Thinker</span>
+            <span class="value-tag">Minimalist</span>
+            <span class="value-tag">Calm & Reflective</span>
+            <span class="value-tag">Always Learning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- BUILDING -->
+  <section id="building">
+    <div class="container-wide">
+      <p class="section-label">What I'm Building</p>
+      <div class="projects-grid reveal">
+        <div class="project-card">
+          <div class="project-card-icon">⬡</div>
+          <div class="project-card-title">Autonomous AI Agent Framework</div>
+          <div class="project-card-desc">A modular framework for building multi-agent systems that reason over cloud infrastructure, triage incidents, and take corrective action autonomously.</div>
+          <div class="project-card-tags">
+            <span class="ptag">Python</span><span class="ptag">LangGraph</span><span class="ptag">AWS</span><span class="ptag">Multi-agent</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-icon">◈</div>
+          <div class="project-card-title">Infrastructure RAG Knowledge System</div>
+          <div class="project-card-desc">A retrieval-augmented system that indexes runbooks, architecture docs, and incident history — giving AI agents institutional memory about your infrastructure.</div>
+          <div class="project-card-tags">
+            <span class="ptag">RAG</span><span class="ptag">OpenSearch</span><span class="ptag">Embeddings</span><span class="ptag">Bedrock</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-icon">⊕</div>
+          <div class="project-card-title">Cloud Automation Intelligence Layer</div>
+          <div class="project-card-desc">An AI-driven orchestration layer on top of Terraform and Kubernetes that translates intent into infrastructure — describe what you need, let it reason how.</div>
+          <div class="project-card-tags">
+            <span class="ptag">Terraform</span><span class="ptag">K8s</span><span class="ptag">LLM</span><span class="ptag">Automation</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-icon">⌘</div>
+          <div class="project-card-title">Developer Platform Framework</div>
+          <div class="project-card-desc">An opinionated internal developer platform built on open standards — bringing golden paths, self-service infra, and observability to engineering teams.</div>
+          <div class="project-card-tags">
+            <span class="ptag">Backstage</span><span class="ptag">ArgoCD</span><span class="ptag">Prometheus</span><span class="ptag">IDP</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-icon">◎</div>
+          <div class="project-card-title">AI Workshop Curriculum Platform</div>
+          <div class="project-card-desc">An educational platform for teaching AI agents and cloud infrastructure — structured modules, hands-on labs, and a community for builders and learners.</div>
+          <div class="project-card-tags">
+            <span class="ptag">Education</span><span class="ptag">AI Agents</span><span class="ptag">Workshops</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-card-icon">⟁</div>
+          <div class="project-card-title">Nature + Tech Retreat Concept</div>
+          <div class="project-card-desc">A slow-living space blending nature, focused thinking, and technology learning — where engineers and creators come to build, reflect, and reconnect.</div>
+          <div class="project-card-tags">
+            <span class="ptag">Concept</span><span class="ptag">Slow Living</span><span class="ptag">Retreats</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- THOUGHTS -->
+  <section id="thoughts">
+    <div class="container">
+      <p class="section-label">Thoughts & Writing</p>
+      <div class="posts-list reveal">
+        <div class="post-item">
+          <span class="post-date">Jun 2025</span>
+          <span class="post-title">Why Every Cloud Platform Needs an Agent Layer</span>
+          <span class="post-tag">AI Agents</span>
+        </div>
+        <div class="post-item">
+          <span class="post-date">May 2025</span>
+          <span class="post-title">Designing Multi-Agent Systems That Don't Fall Apart</span>
+          <span class="post-tag">System Design</span>
+        </div>
+        <div class="post-item">
+          <span class="post-date">Apr 2025</span>
+          <span class="post-title">RAG Isn't Just Retrieval — It's Memory Architecture</span>
+          <span class="post-tag">AI</span>
+        </div>
+        <div class="post-item">
+          <span class="post-date">Mar 2025</span>
+          <span class="post-title">The Internal Developer Platform Isn't a Product, It's a Philosophy</span>
+          <span class="post-tag">Platform Eng</span>
+        </div>
+        <div class="post-item">
+          <span class="post-date">Feb 2025</span>
+          <span class="post-title">Terraform at Scale: When Infrastructure Becomes a Living System</span>
+          <span class="post-tag">Cloud</span>
+        </div>
+        <div class="post-item">
+          <span class="post-date">Jan 2025</span>
+          <span class="post-title">On Slowing Down to Think More Clearly About Technology</span>
+          <span class="post-tag">Reflection</span>
+        </div>
+      </div>
+      <a href="#" class="thoughts-cta">All writing →</a>
+    </div>
+  </section>
+
+  <!-- WORKSHOPS -->
+  <section id="workshops">
+    <div class="container-wide">
+      <p class="section-label">Workshops & Teaching</p>
+      <div class="workshop-header">
+        <h2 class="workshop-headline">Learning by <em>Building</em>.<br>Teaching by Doing.</h2>
+        <p class="workshop-sub">I run hands-on workshops that bridge the gap between theory and real infrastructure — designed for engineers who want to build intelligently.</p>
+      </div>
+      <div class="workshops-grid reveal">
+        <div class="workshop-card">
+          <div class="ws-num">01</div>
+          <div class="ws-title">Building AI Agents from Scratch</div>
+          <div class="ws-desc">A full-day workshop covering the architecture of AI agents — from reasoning loops and tool use to multi-agent orchestration and evaluation. Hands-on labs included.</div>
+        </div>
+        <div class="workshop-card">
+          <div class="ws-num">02</div>
+          <div class="ws-title">Platform Engineering & Developer Experience</div>
+          <div class="ws-desc">Design internal developer platforms that engineering teams actually love. Covers IDP principles, golden paths, ArgoCD, Backstage, and self-service infrastructure patterns.</div>
+        </div>
+        <div class="workshop-card">
+          <div class="ws-num">03</div>
+          <div class="ws-title">AI-Powered Infrastructure Operations</div>
+          <div class="ws-desc">Combine AI with infrastructure operations — build agents that monitor, triage, and resolve incidents. Explore RAG for runbooks, LLM-assisted Terraform, and autonomous ops.</div>
+        </div>
+      </div>
+      <a href="#contact" class="workshop-cta">Get in touch about workshops →</a>
+    </div>
+  </section>
+
+  <!-- EXPERIMENTS -->
+  <section id="experiments">
+    <div class="container-wide">
+      <p class="section-label">Experiments</p>
+      <div class="experiments-grid reveal">
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot active"></span> Active</div>
+          <div class="exp-title">kubectl-ai</div>
+          <div class="exp-desc">A CLI plugin that answers Kubernetes questions in natural language and executes safe cluster commands via an AI agent.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot active"></span> Active</div>
+          <div class="exp-title">Infra Diff Explainer</div>
+          <div class="exp-desc">Paste a Terraform plan — get a plain-English explanation of every change, including risk assessment and rollback notes.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot paused"></span> Paused</div>
+          <div class="exp-title">CloudCost Agent</div>
+          <div class="exp-desc">An AI agent that monitors AWS cost anomalies and generates natural language reports with actionable optimization suggestions.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot active"></span> Active</div>
+          <div class="exp-title">Runbook RAG</div>
+          <div class="exp-desc">Index all your Confluence runbooks into a vector store. Query them with natural language during incidents.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot"></span> Idea</div>
+          <div class="exp-title">Log Detective</div>
+          <div class="exp-desc">Feed CloudWatch logs to an agent that correlates errors, traces root causes, and surfaces patterns across services.</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-status"><span class="status-dot"></span> Idea</div>
+          <div class="exp-title">Learn-in-Nature Kit</div>
+          <div class="exp-desc">An offline-first, solar-powered learning setup for technical workshops in remote and low-connectivity nature environments.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- NATURE & LIFE -->
+  <section id="nature">
+    <div class="nature-bg"></div>
+    <div class="container-wide">
+      <p class="section-label">Nature & Life</p>
+      <div class="nature-layout">
+        <div class="nature-text reveal">
+          <p>I believe that <em>slow thinking produces better systems</em>. The best architecture decisions I've made came not from staring at a screen, but from walks, quiet mornings, and long conversations under open skies.</p>
+          <p>I'm drawn to minimalism — in code, in design, and in life. Less, but better. I try to build things that matter rather than many things that don't.</p>
+          <p>Nature is where I reset. Whether it's a quiet morning in the mountains or watching monsoon clouds roll in, there's a clarity that no whiteboard can replicate. I bring that calm back to my work.</p>
+          <p>I'm working toward creating a small retreat space — somewhere at the edge of a forest, where engineers and creators can think deeply, learn slowly, and build things that matter.</p>
+        </div>
+        <div class="nature-card reveal">
+          <div class="nature-card-label">The Retreat Vision</div>
+          <div class="nature-card-headline">A Space Where Technology<br>and Nature Coexist</div>
+          <p>A small glamping retreat designed for focused work, deep learning, and meaningful rest. Somewhere between a workshop venue and a thinking cabin.</p>
+          <div class="nature-items">
+            <div class="nature-item">
+              <div class="nature-item-dot"></div>
+              <span>Hands-on AI & infrastructure workshops</span>
+            </div>
+            <div class="nature-item">
+              <div class="nature-item-dot"></div>
+              <span>Deep work retreats for technical founders</span>
+            </div>
+            <div class="nature-item">
+              <div class="nature-item-dot"></div>
+              <span>Slow learning — no rushing, just depth</span>
+            </div>
+            <div class="nature-item">
+              <div class="nature-item-dot"></div>
+              <span>Forest mornings, campfire evenings</span>
+            </div>
+            <div class="nature-item">
+              <div class="nature-item-dot"></div>
+              <span>Technology as a tool, not a distraction</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container-wide">
+      <p class="section-label">Contact</p>
+      <div class="contact-layout">
+        <div class="contact-left reveal">
+          <h2>Let's Build<br><em>Something</em> Together</h2>
+          <p>I'm open to conversations about AI agent systems, platform engineering, collaboration on meaningful projects, workshop opportunities, or simply sharing ideas over a long email.</p>
+          <div class="contact-links">
+            <a href="mailto:hello@akash.dev" class="contact-link">
+              <span class="contact-link-label">Email</span>
+              <span class="contact-link-val">hello@akash.dev</span>
+              <span class="contact-link-arrow">↗</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="contact-link">
+              <span class="contact-link-label">LinkedIn</span>
+              <span class="contact-link-val">linkedin.com/in/yourname</span>
+              <span class="contact-link-arrow">↗</span>
+            </a>
+            <a href="https://github.com" target="_blank" class="contact-link">
+              <span class="contact-link-label">GitHub</span>
+              <span class="contact-link-val">github.com/yourname</span>
+              <span class="contact-link-arrow">↗</span>
+            </a>
+            <a href="https://twitter.com" target="_blank" class="contact-link">
+              <span class="contact-link-label">X / Twitter</span>
+              <span class="contact-link-val">@yourhandle</span>
+              <span class="contact-link-arrow">↗</span>
+            </a>
+          </div>
+        </div>
+        <div class="contact-right reveal">
+          <div class="contact-currently">
+            <div class="currently-label">Currently</div>
+            <div class="currently-item">
+              <span class="currently-icon">⬡</span>
+              <div class="currently-text">
+                <strong>Building AI Agent systems</strong>
+                Working on autonomous infrastructure agents and multi-agent orchestration frameworks
+              </div>
+            </div>
+            <div class="currently-item">
+              <span class="currently-icon">◈</span>
+              <div class="currently-text">
+                <strong>Developing workshop curriculum</strong>
+                Creating hands-on modules for AI agents and platform engineering
+              </div>
+            </div>
+            <div class="currently-item">
+              <span class="currently-icon">⟁</span>
+              <div class="currently-text">
+                <strong>Planning the retreat</strong>
+                Early-stage research into building a nature + tech learning space
+              </div>
+            </div>
+            <div class="currently-item">
+              <span class="currently-icon">◎</span>
+              <div class="currently-text">
+                <strong>Writing & thinking</strong>
+                Publishing notes on AI infrastructure, agents, and building things
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">© 2025 Your Name · Built with intention</div>
+      <div class="footer-links">
+        <a href="#hero">Top</a>
+        <a href="mailto:hello@akash.dev">Email</a>
+        <a href="#">GitHub</a>
+        <a href="#">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
